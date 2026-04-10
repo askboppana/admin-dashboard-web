@@ -1,0 +1,4 @@
+Tests: admin-dashboard-web INT
+TC-001: PASS
+TC-002: PASS
+Coverage: 67%
