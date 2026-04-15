@@ -1,0 +1,26 @@
+name: ci-build-test-deploy
+
+on:
+  push:
+    branches: [int]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Setup Java
+        uses: actions/setup-java@v4
+      - name: SCA scan
+        uses: ./.github/workflows/_security-scan.yml
+      - name: Secret scan
+        uses: ./.github/workflows/_validate-secrets.yml
+      - name: Rollback
+        uses: ./.github/workflows/_rollback.yml
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+      - name: Notify Teams
+        uses: ./.github/workflows/_notify.yml
+      - name: Docker push
+        run: docker push $IMAGE_NAME
+      - name: Approval gate
+        run: echo "Approval gate"
